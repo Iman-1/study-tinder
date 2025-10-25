@@ -204,10 +204,9 @@ const SignUpForm = () => {
                 <label htmlFor='courses' className='block text-sm font-medium text-gray-700'>
                     Your Courses
                 </label>
-                <p className="text-xs text-gray-500 mb-2">Enter the 6-digit course code below.</p>
+                <p className="text-xs text-gray-500 mb-2">Type a course code (e.g., MAT137) and press Enter.</p>
 
-                {/* This div displays the course tags */}
-                <div className='flex flex-wrap gap-2 mb-2'>
+                <div className='flex flex-wrap gap-2 mb-2 min-h-[2.5rem]'>
                     {courses.map((course) => (
                         <div key={course} className='flex items-center bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full'>
                             <span>{course}</span>
@@ -228,9 +227,10 @@ const SignUpForm = () => {
                         id='courses-input'
                         name='courses-input'
                         type='text'
-                        placeholder="Type 6 digits..."
+                        placeholder="Type course code and press Enter"
                         value={courseInput}
                         onChange={handleCourseChange}
+                        onKeyDown={handleCourseKeyDown} // Add the KeyDown handler here
                         className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
                     />
                 </div>
