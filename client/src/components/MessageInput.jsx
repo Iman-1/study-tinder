@@ -45,8 +45,8 @@ const MessageInput = ({ match }) => {
 				type='text'
 				value={message}
 				onChange={(e) => setMessage(e.target.value)}
-				className='flex-grow p-3 pl-12 rounded-l-lg border-2 border-pink-500 
-        focus:outline-none focus:ring-2 focus:ring-pink-300'
+				className='flex-grow p-3 pl-12 rounded-l-lg border-2 border-[#7E4F3D] 
+        focus:outline-none focus:ring-2 focus:ring-[#7E4F3D]'
 				placeholder='Type a message...'
 			/>
 
