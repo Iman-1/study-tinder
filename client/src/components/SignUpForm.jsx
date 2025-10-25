@@ -13,25 +13,29 @@ const SignUpForm = () => {
 
 	const { signup, loading } = useAuthStore();
 
-	const handleCourseChange = (e) => {
-        const value = e.target.value;
-        // Only allow numbers and limit the length to 6 digits
-        if (/^\d*$/.test(value) && value.length <= 6) {
-            setCourseInput(value);
-            // When 6 digits are entered, add it to the courses array
-            if (value.length === 6) {
-                if (!courses.includes(value)) {
-                    setCourses([...courses, value]);
-                }
-                // Clear the input field for the next course
-                setCourseInput("");
-            }
-        }
-    };
+	// --- Logic for Handling Course Input ---
+const handleCourseChange = (e) => {
+    // Convert to uppercase for consistency (e.g., mat137 -> MAT137)
+    const value = e.target.value.toUpperCase();
 
-    const removeCourse = (courseToRemove) => {
-        setCourses(courses.filter((course) => course !== courseToRemove));
-    };
+    // Allow letters and numbers, and limit the length to 6
+    if (/^[A-Z0-9]*$/.test(value) && value.length <= 6) {
+        setCourseInput(value);
+        
+        // When 6 characters are entered, add it to the courses array
+        if (value.length === 6) {
+            if (!courses.includes(value)) {
+                setCourses([...courses, value]);
+            }
+            // Clear the input field for the next course
+            setCourseInput("");
+        }
+    }
+};
+
+const removeCourse = (courseToRemove) => {
+    setCourses(courses.filter((course) => course !== courseToRemove));
+};
 
 	return (
 		<form
@@ -204,9 +208,10 @@ const SignUpForm = () => {
                 <label htmlFor='courses' className='block text-sm font-medium text-gray-700'>
                     Your Courses
                 </label>
-                <p className="text-xs text-gray-500 mb-2">Type a course code (e.g., MAT137) and press Enter.</p>
+                <p className="text-xs text-gray-500 mb-2">Enter the 6-digit course code below.</p>
 
-                <div className='flex flex-wrap gap-2 mb-2 min-h-[2.5rem]'>
+                {/* This div displays the course tags */}
+                <div className='flex flex-wrap gap-2 mb-2'>
                     {courses.map((course) => (
                         <div key={course} className='flex items-center bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full'>
                             <span>{course}</span>
@@ -227,10 +232,9 @@ const SignUpForm = () => {
                         id='courses-input'
                         name='courses-input'
                         type='text'
-                        placeholder="Type course code and press Enter"
+                        placeholder="Type 6 digits..."
                         value={courseInput}
                         onChange={handleCourseChange}
-                        onKeyDown={handleCourseKeyDown} // Add the KeyDown handler here
                         className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
                     />
                 </div>
