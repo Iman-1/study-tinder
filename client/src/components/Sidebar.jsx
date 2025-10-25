@@ -27,7 +27,7 @@ const Sidebar = () => {
 				<div className='flex flex-col h-full'>
 					{/* Header */}
 					<div className='p-4 pb-[27px] border-b border-pink-200 flex justify-between items-center'>
-						<h2 className='text-xl font-bold text-pink-600'>Matches</h2>
+						<h2 className='text-xl font-bold text-[#653826]'>Matches</h2>
 						<button
 							className='lg:hidden p-1 text-gray-500 hover:text-gray-700 focus:outline-none'
 							onClick={toggleSidebar}

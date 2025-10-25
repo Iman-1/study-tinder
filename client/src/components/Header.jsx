@@ -22,13 +22,13 @@ export const Header = () => {
 	}, []);
 
 	return (
-		<header className='bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 shadow-lg'>
+		<header className='bg-[#000000] shadow-md'>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 				<div className='flex justify-between items-center py-4'>
 					<div className='flex items-center'>
 						<Link to='/' className='flex items-center space-x-2'>
 							<Flame className='w-8 h-8 text-white' />
-							<span className='text-2xl font-bold text-white hidden sm:inline'>Swipe</span>
+							<span className='text-2xl font-bold text-white hidden sm:inline'>Fidget</span>
 						</Link>
 					</div>
 
@@ -105,7 +105,7 @@ export const Header = () => {
 							<>
 								<Link
 									to='/profile'
-									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#d0947c]'
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									Profile
