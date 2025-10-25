@@ -2,8 +2,11 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const AvailabilitySelector = ({ availability, setAvailability }) => {
+    const [isDragging, setIsDragging] = useState(false);
+    // 'dragMode' determines if we are selecting or deselecting during a drag
+    const [dragMode, setDragMode] = useState(null); 
+
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    // Create an array of hours from 8 AM to 7 PM (representing the 8 AM - 8 PM block)
     const times = Array.from({ length: 12 }, (_, i) => {
         const hour = i + 8;
         if (hour === 12) return "12 PM";
@@ -11,33 +14,65 @@ const AvailabilitySelector = ({ availability, setAvailability }) => {
         return `${hour} AM`;
     });
 
-    const handleSlotClick = (day, time) => {
-        // Creates a clean ID like 'Mon-8AM' or 'Wed-1PM'
-        const slotId = `${day}-${time.replace(" ", "")}`;
+    // This function starts the drag action
+    const handleMouseDown = (slotId) => {
+        setIsDragging(true);
         const isSelected = availability.includes(slotId);
+        
+        // If the first cell clicked is already selected, we start deselecting.
+        // Otherwise, we start selecting.
+        const currentDragMode = isSelected ? 'deselect' : 'select';
+        setDragMode(currentDragMode);
 
-        const newAvailability = isSelected
-            ? availability.filter((s) => s !== slotId) // Deselect if already chosen
-            : [...availability, slotId]; // Select if not chosen
+        // Apply the initial action to the clicked cell
+        updateSlot(slotId, currentDragMode);
+    };
 
-        setAvailability(newAvailability);
+    // This function is called as the mouse moves over other cells
+    const handleMouseEnter = (slotId) => {
+        if (isDragging) {
+            updateSlot(slotId, dragMode);
+        }
+    };
+    
+    // This function stops the drag action
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setDragMode(null);
+    };
+
+    // Helper function to add or remove a slot without duplication
+    const updateSlot = (slotId, mode) => {
+        setAvailability(prev => {
+            const isSelected = prev.includes(slotId);
+            if (mode === 'select' && !isSelected) {
+                return [...prev, slotId];
+            }
+            if (mode === 'deselect' && isSelected) {
+                return prev.filter(s => s !== slotId);
+            }
+            return prev; // No change needed
+        });
     };
 
     return (
         <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Your Weekly Availability (8 AM - 8 PM)
+                Your Weekly Availability (Click and drag to select)
             </label>
-            <div className='grid grid-cols-8 gap-0 text-center border-t border-l border-gray-200'>
+            {/* onMouseUp and onMouseLeave on the container ensure the drag stops even if the mouse leaves the grid */}
+            <div 
+                className='grid grid-cols-8 gap-0 text-center border-t border-l border-gray-200 select-none'
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+            >
                 {/* Header Row */}
                 <div className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>Time</div>
-                {days.map((day) => (
-                    <div key={day} className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>{day}</div>
-                ))}
+                {days.map(day => <div key={day} className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>{day}</div>)}
 
                 {/* Grid Rows for each hour */}
                 {times.map((time) => (
-                    <div key={time} className='contents'> {/* Use 'contents' to maintain grid layout */}
+                    <div key={time} className='contents'>
                         <div className='border-b border-r border-gray-200 p-1 text-xs font-bold text-gray-600 flex items-center justify-center'>{time}</div>
                         {days.map((day) => {
                             const slotId = `${day}-${time.replace(" ", "")}`;
@@ -45,7 +80,10 @@ const AvailabilitySelector = ({ availability, setAvailability }) => {
                             return (
                                 <div
                                     key={slotId}
-                                    onClick={() => handleSlotClick(day, time)}
+                                    // Start dragging on mouse down
+                                    onMouseDown={() => handleMouseDown(slotId)}
+                                    // Continue dragging on mouse enter
+                                    onMouseEnter={() => handleMouseEnter(slotId)}
                                     className={`border-b border-r border-gray-200 h-6 cursor-pointer transition-colors duration-150 ${
                                         isSelected ? "bg-pink-500" : "bg-white hover:bg-pink-100"
                                     }`}
@@ -58,7 +96,6 @@ const AvailabilitySelector = ({ availability, setAvailability }) => {
         </div>
     );
 };
-
 const SignUpForm = () => {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
