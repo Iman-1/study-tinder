@@ -1,6 +1,58 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 
+const AvailabilitySelector = ({ availability, setAvailability }) => {
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    // Using more granular times for better scheduling
+    const times = ["Morning (8-12)", "Afternoon (12-5)", "Evening (5-9)"];
+
+    const handleSlotClick = (day, time) => {
+        const slotId = `${day}-${time.split(" ")[0]}`; // Creates IDs like 'Mon-Morning'
+        const isSelected = availability.includes(slotId);
+
+        const newAvailability = isSelected
+            ? availability.filter((s) => s !== slotId) // Remove if already selected
+            : [...availability, slotId]; // Add if not selected
+
+        setAvailability(newAvailability);
+    };
+
+    return (
+        <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                Your Weekly Availability
+            </label>
+            <div className='grid grid-cols-4 gap-2 text-center border-t border-l border-gray-200'>
+                {/* Header Row */}
+                <div className='border-b border-r border-gray-200 p-2 text-xs font-bold text-gray-600'>Time</div>
+                {days.map((day) => (
+                    <div key={day} className='border-b border-r border-gray-200 p-2 text-xs font-bold text-gray-600'>{day}</div>
+                ))}
+
+                {/* Grid Rows */}
+                {times.map((time) => (
+                    <div key={time} className='contents'> {/* Use 'contents' to keep grid layout */}
+                        <div className='border-b border-r border-gray-200 p-2 text-xs font-bold text-gray-600 flex items-center justify-center'>{time}</div>
+                        {days.map((day) => {
+                            const slotId = `${day}-${time.split(" ")[0]}`;
+                            const isSelected = availability.includes(slotId);
+                            return (
+                                <div
+                                    key={slotId}
+                                    onClick={() => handleSlotClick(day, time)}
+                                    className={`border-b border-r border-gray-200 cursor-pointer transition-colors duration-150 ${
+                                        isSelected ? "bg-pink-500" : "bg-white hover:bg-pink-100"
+                                    }`}
+                                />
+                            );
+                        })}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const SignUpForm = () => {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
@@ -10,7 +62,7 @@ const SignUpForm = () => {
 	const [genderPreference, setGenderPreference] = useState("");
 	const [courses, setCourses] = useState([]);
 	const [courseInput, setCourseInput] = useState("");
-
+	const [availability, setAvailability] = useState([]);
 	const { signup, loading } = useAuthStore();
 
 	// --- Logic for Handling Course Input ---
@@ -232,13 +284,16 @@ const removeCourse = (courseToRemove) => {
                         id='courses-input'
                         name='courses-input'
                         type='text'
-                        placeholder="Type 6 digits..."
+                        placeholder="Type the course code.."
                         value={courseInput}
                         onChange={handleCourseChange}
                         className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
                     />
                 </div>
             </div>
+
+			{/* WHEN ARE YOU AVAILABLE */}
+			<AvailabilitySelector availability={availability} setAvailability={setAvailability} />
 
 			<div>
 				<button
