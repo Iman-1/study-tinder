@@ -8,9 +8,13 @@ const AuthPage = () => {
 
 	return (
 		<div
-			className='min-h-screen flex items-center justify-center bg-gradient-to-br
-		from-red-500 to-pink-500 p-4
-	'
+			className='min-h-screen flex items-center justify-center p-4'
+			style={{
+    		backgroundImage: "url('/Users/mehar/tinder-clone-study/client/public/orange_library.jpg')",
+    		backgroundSize: "cover",
+    		backgroundPosition: "center",
+    		backgroundRepeat: "no-repeat",
+  }}
 		>
 			<div className='w-full max-w-md'>
 				<h2 className='text-center text-3xl font-extrabold text-white mb-8'>
