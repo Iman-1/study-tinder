@@ -56,9 +56,9 @@ const LoginForm = () => {
 				className={`w-full flex justify-center py-2 px-4 border border-transparent 
 					rounded-md shadow-sm text-sm font-medium text-white ${
 						loading
-							? "bg-pink-400 cursor-not-allowed"
-							: "bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-					}`}
+							? "bg-[#d57d23] cursor-not-allowed"
+							: "bg-[#d57d23] hover:bg-[#aa5f16] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+					}`} 
 				disabled={loading}
 			>
 				{loading ? "Signing in..." : "Sign in"}
