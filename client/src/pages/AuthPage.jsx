@@ -18,7 +18,7 @@ const AuthPage = () => {
 		>
 			<div className='w-full max-w-md'>
 				<h2 className='text-center text-3xl font-extrabold text-white mb-8'>
-					{isLogin ? "Sign in to Swipe" : "Create a Swipe account"}
+					{isLogin ? "Sign in to Fidget" : "Create a Fidget account"}
 				</h2>
 
 				<div className='bg-white shadow-xl rounded-lg p-8'>
@@ -26,7 +26,7 @@ const AuthPage = () => {
 
 					<div className='mt-8 text-center'>
 						<p className='text-sm text-gray-600'>
-							{isLogin ? "New to Swipe?" : "Already have an account?"}
+							{isLogin ? "New to Fidget?" : "Already have an account?"}
 						</p>
 
 						<button
