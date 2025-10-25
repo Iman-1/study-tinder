@@ -10,7 +10,7 @@ const AuthPage = () => {
 		<div
 			className='min-h-screen flex items-center justify-center p-4'
 			style={{
-    		backgroundImage: "url('client/public/screenshot-for-readme.png')",
+    		backgroundImage: "url('client/public/orange_library.jpg')",
     		backgroundSize: "cover",
     		backgroundPosition: "center",
     		backgroundRepeat: "no-repeat",
