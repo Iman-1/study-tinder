@@ -3,16 +3,22 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const AvailabilitySelector = ({ availability, setAvailability }) => {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    // Using more granular times for better scheduling
-    const times = ["Morning (8-12)", "Afternoon (12-5)", "Evening (5-9)"];
+    // Create an array of hours from 8 AM to 7 PM (representing the 8 AM - 8 PM block)
+    const times = Array.from({ length: 12 }, (_, i) => {
+        const hour = i + 8;
+        if (hour === 12) return "12 PM";
+        if (hour > 12) return `${hour - 12} PM`;
+        return `${hour} AM`;
+    });
 
     const handleSlotClick = (day, time) => {
-        const slotId = `${day}-${time.split(" ")[0]}`; // Creates IDs like 'Mon-Morning'
+        // Creates a clean ID like 'Mon-8AM' or 'Wed-1PM'
+        const slotId = `${day}-${time.replace(" ", "")}`;
         const isSelected = availability.includes(slotId);
 
         const newAvailability = isSelected
-            ? availability.filter((s) => s !== slotId) // Remove if already selected
-            : [...availability, slotId]; // Add if not selected
+            ? availability.filter((s) => s !== slotId) // Deselect if already chosen
+            : [...availability, slotId]; // Select if not chosen
 
         setAvailability(newAvailability);
     };
@@ -20,27 +26,27 @@ const AvailabilitySelector = ({ availability, setAvailability }) => {
     return (
         <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Your Weekly Availability
+                Your Weekly Availability (8 AM - 8 PM)
             </label>
-            <div className='grid grid-cols-4 gap-2 text-center border-t border-l border-gray-200'>
+            <div className='grid grid-cols-8 gap-0 text-center border-t border-l border-gray-200'>
                 {/* Header Row */}
-                <div className='border-b border-r border-gray-200 p-2 text-xs font-bold text-gray-600'>Time</div>
+                <div className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>Time</div>
                 {days.map((day) => (
-                    <div key={day} className='border-b border-r border-gray-200 p-2 text-xs font-bold text-gray-600'>{day}</div>
+                    <div key={day} className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>{day}</div>
                 ))}
 
-                {/* Grid Rows */}
+                {/* Grid Rows for each hour */}
                 {times.map((time) => (
-                    <div key={time} className='contents'> {/* Use 'contents' to keep grid layout */}
-                        <div className='border-b border-r border-gray-200 p-2 text-xs font-bold text-gray-600 flex items-center justify-center'>{time}</div>
+                    <div key={time} className='contents'> {/* Use 'contents' to maintain grid layout */}
+                        <div className='border-b border-r border-gray-200 p-1 text-xs font-bold text-gray-600 flex items-center justify-center'>{time}</div>
                         {days.map((day) => {
-                            const slotId = `${day}-${time.split(" ")[0]}`;
+                            const slotId = `${day}-${time.replace(" ", "")}`;
                             const isSelected = availability.includes(slotId);
                             return (
                                 <div
                                     key={slotId}
                                     onClick={() => handleSlotClick(day, time)}
-                                    className={`border-b border-r border-gray-200 cursor-pointer transition-colors duration-150 ${
+                                    className={`border-b border-r border-gray-200 h-6 cursor-pointer transition-colors duration-150 ${
                                         isSelected ? "bg-pink-500" : "bg-white hover:bg-pink-100"
                                     }`}
                                 />
@@ -262,7 +268,7 @@ const removeCourse = (courseToRemove) => {
                 </label>
                 <p className="text-xs text-gray-500 mb-2">Enter the 6-digit course code below.</p>
 
-                {/* This div displays the course tags */}
+                
                 <div className='flex flex-wrap gap-2 mb-2'>
                     {courses.map((course) => (
                         <div key={course} className='flex items-center bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full'>
@@ -291,9 +297,9 @@ const removeCourse = (courseToRemove) => {
                     />
                 </div>
             </div>
-
-			{/* WHEN ARE YOU AVAILABLE */}
+				{/* AVAILABILITY SELECTOR */}	
 			<AvailabilitySelector availability={availability} setAvailability={setAvailability} />
+			
 
 			<div>
 				<button
