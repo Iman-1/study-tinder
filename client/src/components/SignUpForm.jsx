@@ -8,9 +8,30 @@ const SignUpForm = () => {
 	const [gender, setGender] = useState("");
 	const [age, setAge] = useState("");
 	const [genderPreference, setGenderPreference] = useState("");
-	const [courses, setCourses] = useState("");
+	const [courses, setCourses] = useState([]);
+	const [courseInput, setCourseInput] = useState("");
 
 	const { signup, loading } = useAuthStore();
+
+	const handleCourseChange = (e) => {
+        const value = e.target.value;
+        // Only allow numbers and limit the length to 6 digits
+        if (/^\d*$/.test(value) && value.length <= 6) {
+            setCourseInput(value);
+            // When 6 digits are entered, add it to the courses array
+            if (value.length === 6) {
+                if (!courses.includes(value)) {
+                    setCourses([...courses, value]);
+                }
+                // Clear the input field for the next course
+                setCourseInput("");
+            }
+        }
+    };
+
+    const removeCourse = (courseToRemove) => {
+        setCourses(courses.filter((course) => course !== courseToRemove));
+    };
 
 	return (
 		<form
@@ -183,17 +204,35 @@ const SignUpForm = () => {
                 <label htmlFor='courses' className='block text-sm font-medium text-gray-700'>
                     Your Courses
                 </label>
-                <p className="text-xs text-gray-500 mb-1">Separate course codes with a comma.</p>
+                <p className="text-xs text-gray-500 mb-2">Enter the 6-digit course code below.</p>
+
+                {/* This div displays the course tags */}
+                <div className='flex flex-wrap gap-2 mb-2'>
+                    {courses.map((course) => (
+                        <div key={course} className='flex items-center bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full'>
+                            <span>{course}</span>
+                            <button
+                                type='button'
+                                onClick={() => removeCourse(course)}
+                                className='ml-2 -mr-1 text-pink-600 hover:text-pink-800'
+                                aria-label={`Remove ${course}`}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
                 <div className='mt-1'>
                     <input
-                        id='courses'
-                        name='courses'
+                        id='courses-input'
+                        name='courses-input'
                         type='text'
-                        placeholder="e.g., CS 101, MATH 251, ENGL 105"
-                        value={courses}
-                        onChange={(e) => setCourses(e.target.value)}
+                        placeholder="Type 6 digits..."
+                        value={courseInput}
+                        onChange={handleCourseChange}
                         className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
-					/>
+                    />
                 </div>
             </div>
 
