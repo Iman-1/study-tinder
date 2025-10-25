@@ -8,6 +8,7 @@ const SignUpForm = () => {
 	const [gender, setGender] = useState("");
 	const [age, setAge] = useState("");
 	const [genderPreference, setGenderPreference] = useState("");
+	const [courses, setCourses] = useState("");
 
 	const { signup, loading } = useAuthStore();
 
@@ -176,6 +177,25 @@ const SignUpForm = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* CURRENT COURSES */}
+            <div>
+                <label htmlFor='courses' className='block text-sm font-medium text-gray-700'>
+                    Your Courses
+                </label>
+                <p className="text-xs text-gray-500 mb-1">Separate course codes with a comma.</p>
+                <div className='mt-1'>
+                    <input
+                        id='courses'
+                        name='courses'
+                        type='text'
+                        placeholder="e.g., CS 101, MATH 251, ENGL 105"
+                        value={courses}
+                        onChange={(e) => setCourses(e.target.value)}
+                        className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+                    />
+                </div>
+            </div>
 
 			<div>
 				<button
