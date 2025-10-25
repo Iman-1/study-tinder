@@ -131,7 +131,7 @@ const SignUpForm = () => {
 
 			{/* GENDER PREFERENCE */}
 			<div>
-				<label className='block text-sm font-medium text-gray-700'>Prefer Me</label>
+				<label className='block text-sm font-medium text-gray-700'>Preferance</label>
 				<div className='mt-2 space-y-2'>
 					<div className='flex items-center'>
 						<input
@@ -192,7 +192,7 @@ const SignUpForm = () => {
                         placeholder="e.g., CS 101, MATH 251, ENGL 105"
                         value={courses}
                         onChange={(e) => setCourses(e.target.value)}
-                        className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+                        className='h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300'
                     />
                 </div>
             </div>
