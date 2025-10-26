@@ -3,6 +3,102 @@ import { Header } from "../components/Header";
 import { useAuthStore } from "../store/useAuthStore";
 import { useUserStore } from "../store/useUserStore";
 
+const AvailabilitySelector = ({ availability, setAvailability }) => {
+    const [isDragging, setIsDragging] = useState(false);
+    // 'dragMode' determines if we are selecting or deselecting during a drag
+    const [dragMode, setDragMode] = useState(null); 
+
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const times = Array.from({ length: 12 }, (_, i) => {
+        const hour = i + 8;
+        if (hour === 12) return "12 PM";
+        if (hour > 12) return `${hour - 12} PM`;
+        return `${hour} AM`;
+    });
+
+    // This function starts the drag action
+    const handleMouseDown = (slotId) => {
+        setIsDragging(true);
+        const isSelected = availability.includes(slotId);
+        
+        // If the first cell clicked is already selected, we start deselecting.
+        // Otherwise, we start selecting.
+        const currentDragMode = isSelected ? 'deselect' : 'select';
+        setDragMode(currentDragMode);
+
+        // Apply the initial action to the clicked cell
+        updateSlot(slotId, currentDragMode);
+    };
+
+    // This function is called as the mouse moves over other cells
+    const handleMouseEnter = (slotId) => {
+        if (isDragging) {
+            updateSlot(slotId, dragMode);
+        }
+    };
+    
+    // This function stops the drag action
+    const handleMouseUp = () => {
+        setIsDragging(false);
+        setDragMode(null);
+    };
+
+    // Helper function to add or remove a slot without duplication
+    const updateSlot = (slotId, mode) => {
+        setAvailability(prev => {
+            const isSelected = prev.includes(slotId);
+            if (mode === 'select' && !isSelected) {
+                return [...prev, slotId];
+            }
+            if (mode === 'deselect' && isSelected) {
+                return prev.filter(s => s !== slotId);
+            }
+            return prev; // No change needed
+        });
+    };
+
+    return (
+        <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+                Your Weekly Availability (Click and drag to select)
+            </label>
+            {/* onMouseUp and onMouseLeave on the container ensure the drag stops even if the mouse leaves the grid */}
+            <div 
+                className='grid grid-cols-8 gap-0 text-center border-t border-l border-gray-200 select-none'
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+            >
+                {/* Header Row */}
+                <div className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>Time</div>
+                {days.map(day => <div key={day} className='border-b border-r border-gray-200 py-1 text-xs font-bold text-gray-600'>{day}</div>)}
+
+                {/* Grid Rows for each hour */}
+                {times.map((time) => (
+                    <div key={time} className='contents'>
+                        <div className='border-b border-r border-gray-200 p-1 text-xs font-bold text-gray-600 flex items-center justify-center'>{time}</div>
+                        {days.map((day) => {
+                            const slotId = `${day}-${time.replace(" ", "")}`;
+                            const isSelected = availability.includes(slotId);
+                            return (
+                                <div
+                                    key={slotId}
+                                    // Start dragging on mouse down
+                                    onMouseDown={() => handleMouseDown(slotId)}
+                                    // Continue dragging on mouse enter
+                                    onMouseEnter={() => handleMouseEnter(slotId)}
+                                    className={`border-b border-r border-gray-200 h-6 cursor-pointer transition-colors duration-150 ${
+                                        isSelected ? "bg-pink-500" : "bg-white hover:bg-pink-100"
+                                    }`}
+                                />
+                            );
+                        })}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const ProfilePage = () => {
 	const { authUser } = useAuthStore();
 	const [name, setName] = useState(authUser.name || "");
@@ -11,15 +107,45 @@ const ProfilePage = () => {
 	const [gender, setGender] = useState(authUser.gender || "");
 	const [genderPreference, setGenderPreference] = useState(authUser.genderPreference || []);
 	const [image, setImage] = useState(authUser.image || null);
+	const [courses, setCourses] = useState(authUser.courses || []);
+    const [courseInput, setCourseInput] = useState("");
+    const [availability, setAvailability] = useState(authUser.availability || []);
 
 	const fileInputRef = useRef(null);
 
 	const { loading, updateProfile } = useUserStore();
+	const handleCourseChange = (e) => {
+        setCourseInput(e.target.value.toUpperCase());
+    };
+
+    const handleCourseKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const newCourse = courseInput.trim();
+            if (newCourse && !courses.includes(newCourse)) {
+                setCourses([...courses, newCourse]);
+                setCourseInput("");
+            }
+        }
+    };
+
+    const removeCourse = (courseToRemove) => {
+        setCourses(courses.filter((course) => course !== courseToRemove));
+    };
 
 	const handleSubmit = (e) => {
-		e.preventDefault();
-		updateProfile({ name, bio, age, gender, genderPreference, image });
-	};
+        e.preventDefault();
+        updateProfile({ 
+            name, 
+            bio, 
+            age, 
+            gender, 
+            genderPreference, 
+            image,
+            courses, // Send courses
+            availability // Send availability
+        });
+    };
 
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
