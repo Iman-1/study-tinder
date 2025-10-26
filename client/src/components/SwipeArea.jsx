@@ -31,7 +31,7 @@ const SwipeArea = () => {
 								className='rounded-lg object-cover h-full pointer-events-none'
 							/>
 						</figure>
-						<div className='card-body bg-gradient-to-b from-white to-pink-50'>
+						<div className='card-body bg-white p-4 h-1/4'>
 							<h2 className='card-title text-2xl text-gray-800'>
 								{user.name}, {user.age}
 							</h2>

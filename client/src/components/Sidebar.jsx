@@ -27,7 +27,7 @@ const Sidebar = () => {
 				<div className='flex flex-col h-full'>
 					{/* Header */}
 					<div className='p-4 pb-[27px] border-b border-pink-200 flex justify-between items-center'>
-						<h2 className='text-xl font-bold text-pink-600'>Matches</h2>
+						<h2 className='text-xl font-bold text-[#653826]'>Matches</h2>
 						<button
 							className='lg:hidden p-1 text-gray-500 hover:text-gray-700 focus:outline-none'
 							onClick={toggleSidebar}
@@ -44,11 +44,11 @@ const Sidebar = () => {
 						) : (
 							matches.map((match) => (
 								<Link key={match._id} to={`/chat/${match._id}`}>
-									<div className='flex items-center mb-4 cursor-pointer hover:bg-pink-50 p-2 rounded-lg transition-colors duration-300'>
+									<div className='flex items-center mb-4 cursor-pointer hover:bg-[#e8ab92] p-2 rounded-lg transition-colors duration-300'>
 										<img
 											src={match.image || "/avatar.png"}
 											alt='User avatar'
-											className='size-12 object-cover rounded-full mr-3 border-2 border-pink-300'
+											className='size-12 object-cover rounded-full mr-3 border-2 border-[#825644]'
 										/>
 
 										<h3 className='font-semibold text-gray-800'>{match.name}</h3>
@@ -61,7 +61,7 @@ const Sidebar = () => {
 			</div>
 
 			<button
-				className='lg:hidden fixed top-4 left-4 p-2 bg-pink-500 text-white rounded-md z-0'
+				className='lg:hidden fixed top-4 left-4 p-2 bg-[#825644] text-white rounded-md z-0'
 				onClick={toggleSidebar}
 			>
 				<MessageCircle size={24} />
