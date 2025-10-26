@@ -70,14 +70,14 @@ export const Header = () => {
 							<>
 								<Link
 									to='/auth'
-									className='text-white hover:text-pink-200 transition duration-150 ease-in-out'
+									className='text-white hover:text-[#825644] transition duration-150 ease-in-out'
 								>
 									Login
 								</Link>
 								<Link
 									to='/auth'
-									className='bg-white text-pink-600 px-4 py-2 rounded-full font-medium
-                   hover:bg-pink-100 transition duration-150 ease-in-out'
+									className='bg-white text-[#825644] px-4 py-2 rounded-full font-medium
+                   hover:bg-[#825644] transition duration-150 ease-in-out'
 								>
 									Sign Up
 								</Link>
@@ -99,7 +99,7 @@ export const Header = () => {
 			{/* MOBILE MENU */}
 
 			{mobileMenuOpen && (
-				<div className='md:hidden bg-pink-600'>
+				<div className='md:hidden bg-[#825644]'>
 					<div className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
 						{authUser ? (
 							<>
@@ -115,7 +115,7 @@ export const Header = () => {
 										logout();
 										setMobileMenuOpen(false);
 									}}
-									className='block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#825644]'
 								>
 									Logout
 								</button>
@@ -124,14 +124,14 @@ export const Header = () => {
 							<>
 								<Link
 									to='/auth'
-									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#825644]'
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									Login
 								</Link>
 								<Link
 									to='/auth'
-									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#825644]'
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									Sign Up
